@@ -1,5 +1,6 @@
 <?php
-
+use App\Helpers\SnNameGenerator as SnmG
+use Illuminate\Support\Str
 $factory->define(App\Region::class, function (Faker\Generator $faker) {
     return [
         'uuid' => $faker->uuid,
@@ -14,12 +15,20 @@ $factory->define(App\Type::class, function (Faker\Generator $faker) {
     ];
 });
 
+// $factory->define(App\Gestionnaire::class, function (Faker\Generator $faker) {
+//     return [
+//         'uuid' => $faker->uuid,
+//         'matricule' => $faker->word,
+//         'users_id' => function () {
+//              return factory(App\User::class)->create()->id;
+//         },
+//     ];
+// });
 $factory->define(App\Gestionnaire::class, function (Faker\Generator $faker) {
     return [
-        'uuid' => $faker->uuid,
-        'matricule' => $faker->word,
+        'matricule' => "GEST" $faker->word,
         'users_id' => function () {
-             return factory(App\User::class)->create()->id;
+             return factory(App\User::class)->create(["roles_id"=>$role_id])->id;
         },
     ];
 });
@@ -115,18 +124,29 @@ $factory->define(App\Comptable::class, function (Faker\Generator $faker) {
     ];
 });
 
+// $factory->define(App\User::class, function (Faker\Generator $faker) {
+//     return [
+//         'uuid' => $faker->uuid,
+//         'firstname' => $faker->firstName,
+//         'name' => $faker->name,
+//         'telephone' => $faker->word,
+//         'email' => $faker->safeEmail,
+//         'email_verified_at' => $faker->dateTimeBetween(),
+//         'password' => bcrypt($faker->password),
+//         'roles_id' => function () {
+//              return factory(App\Role::class)->create()->id;
+//         },
+//     ];
+// });
 $factory->define(App\User::class, function (Faker\Generator $faker) {
     return [
-        'uuid' => $faker->uuid,
-        'firstname' => $faker->firstName,
-        'name' => $faker->name,
-        'telephone' => $faker->word,
-        'email' => $faker->safeEmail,
+        'firstname' => Snmg::getfirstName(),
+        'name' => Snmg::getName(),
+        'telephone' => $faker->phoneNumber(),
+        'email' => Str::random(5)."."$faker->safeEmail,
         'email_verified_at' => $faker->dateTimeBetween(),
-        'password' => bcrypt($faker->password),
-        'roles_id' => function () {
-             return factory(App\Role::class)->create()->id;
-        },
+        'password' => bcrypt('secret'),
+        
     ];
 });
 
